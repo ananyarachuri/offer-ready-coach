@@ -1,0 +1,6 @@
+{
+  "name": "offer-ready-coach",
+  "private": true,
+  "description": "AI job-search prep coach for Data Analyst roles",
+  "engines": { "node": ">=18" }
+}

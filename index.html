@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Offer Ready Coach: AI interview and resume practice for Data Analyst and Data Analyst with AI roles.">
+<title>Offer Ready Coach</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: a coaching studio — a deep navy rail (setup + live scorecard) beside a bright interview room; rail stacks on top on phones. */
+:root{
+  --bg:#eef1f8; --panel:#ffffff; --ink:#121a2e; --muted:#5d6780; --line:#e1e6f0;
+  --accent:#2f5bea; --accent-2:#5b7cff; --accent-ink:#ffffff; --accent-soft:#e8eeff;
+  --peach:#ff9f74; --peach-soft:#ffe6d9; --peach-ink:#7a2e0e;
+  --coach:#f3f6fd; --you:#2f5bea; --you-ink:#ffffff; --warn:#b3261e; --ok:#1d8a5b;
+  --rail:#0f1a3d; --rail-2:#16245a; --rail-ink:#eef1fb; --rail-muted:#a6b1d0; --rail-line:rgba(255,255,255,.12); --rail-field:#1a2a63;
+  --shadow:0 1px 2px rgba(18,26,46,.06),0 8px 24px rgba(18,26,46,.06);
+  --display:"Familjen Grotesk","Helvetica Neue",Arial,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0b1020; --panel:#121a2e; --ink:#e7ebf6; --muted:#97a2bf; --line:#232e4a;
+  --accent:#7b9bff; --accent-2:#a3b8ff; --accent-ink:#0b1020; --accent-soft:#1c2850;
+  --peach:#ff9f74; --peach-soft:#4a2a1c; --peach-ink:#ffd9c4;
+  --coach:#18223b; --you:#3d63f0; --you-ink:#ffffff; --warn:#ff8a80; --ok:#5fd3a0;
+  --rail:#080d1f; --rail-2:#111a3d; --rail-ink:#eef1fb; --rail-muted:#9aa6c8; --rail-line:rgba(255,255,255,.1); --rail-field:#152052;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0b1020; --panel:#121a2e; --ink:#e7ebf6; --muted:#97a2bf; --line:#232e4a;
+  --accent:#7b9bff; --accent-2:#a3b8ff; --accent-ink:#0b1020; --accent-soft:#1c2850;
+  --peach:#ff9f74; --peach-soft:#4a2a1c; --peach-ink:#ffd9c4;
+  --coach:#18223b; --you:#3d63f0; --you-ink:#ffffff; --warn:#ff8a80; --ok:#5fd3a0;
+  --rail:#080d1f; --rail-2:#111a3d; --rail-ink:#eef1fb; --rail-muted:#9aa6c8; --rail-line:rgba(255,255,255,.1); --rail-field:#152052;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.55}
+.app{min-height:100%;display:grid;grid-template-columns:330px minmax(0,1fr)}
+@media (max-width:860px){.app{grid-template-columns:minmax(0,1fr)}}
+button{font:inherit}
+:focus-visible{outline:2px solid var(--accent-2);outline-offset:2px}
+
+/* ---------- Rail ---------- */
+aside{background:radial-gradient(120% 60% at 0% 0%,var(--rail-2) 0%,transparent 60%),var(--rail);color:var(--rail-ink);
+  padding-block:24px;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:20px;display:flex;flex-direction:column;gap:22px;position:relative;overflow:hidden}
+aside::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.07) 1px,transparent 1px);background-size:18px 18px;mask-image:linear-gradient(to bottom,#000 0%,transparent 45%);pointer-events:none}
+aside>*{position:relative}
+@media (max-width:860px){aside{padding-right:max(20px,env(safe-area-inset-right,0px))}}
+.brand{display:flex;gap:12px;align-items:center}
+.logo{flex:none;width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--peach) 0%,#ff7a59 100%);display:grid;place-items:center;box-shadow:0 6px 18px rgba(255,122,89,.35)}
+.logo svg{width:24px;height:24px}
+.brand h1{font-family:var(--display);font-weight:700;font-size:22px;line-height:1.1;margin:0;letter-spacing:-.01em}
+.brand p{margin:2px 0 0;color:var(--rail-muted);font-size:13px}
+.sect{display:flex;flex-direction:column;gap:10px}
+.label{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--rail-muted)}
+.fields{display:grid;grid-template-columns:1fr;gap:10px}
+@media (max-width:860px) and (min-width:520px){.fields{grid-template-columns:1fr 1fr}}
+label.f{display:flex;flex-direction:column;gap:5px;font-size:12.5px;color:var(--rail-muted)}
+select{font:inherit;font-size:14px;color:var(--rail-ink);background:var(--rail-field);border:1px solid var(--rail-line);border-radius:10px;padding:9px 34px 9px 12px;appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a6b1d0' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+select option{color:#121a2e;background:#fff}
+.modes{display:flex;flex-direction:column;gap:8px}
+.mode{display:flex;gap:12px;align-items:center;text-align:left;background:rgba(255,255,255,.04);color:var(--rail-ink);border:1px solid var(--rail-line);border-radius:12px;padding:11px 12px;cursor:pointer;transition:background .15s,border-color .15s}
+.mode:hover{background:rgba(255,255,255,.08)}
+.mode .ic{flex:none;width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:rgba(255,255,255,.07);color:var(--rail-muted)}
+.mode .ic svg{width:18px;height:18px}
+.mode b{display:block;font-weight:600;font-size:14px}
+.mode small{display:block;color:var(--rail-muted);font-size:12px;line-height:1.35}
+.mode[aria-pressed="true"]{background:rgba(91,124,255,.18);border-color:rgba(163,184,255,.55)}
+.mode[aria-pressed="true"] .ic{background:var(--accent-2);color:#0b1020}
+.btn{border-radius:10px;padding:10px 16px;cursor:pointer;font-weight:600;border:1px solid transparent;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .1s,filter .15s}
+.btn:active{transform:translateY(1px)}
+.btn.primary{background:linear-gradient(135deg,var(--peach),#ff7a59);color:#2a0f04;box-shadow:0 6px 18px rgba(255,122,89,.3)}
+.btn.primary:hover{filter:brightness(1.05)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn svg{width:16px;height:16px}
+
+.scorecard{background:rgba(255,255,255,.05);border:1px solid var(--rail-line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:12px}
+.sc-top{display:flex;justify-content:space-between;align-items:flex-end;gap:10px}
+.sc-num{font-family:var(--display);font-size:34px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.sc-num small{font-size:14px;color:var(--rail-muted);font-weight:500;margin-left:2px}
+.sc-meta{text-align:right;font-size:12px;color:var(--rail-muted);line-height:1.4}
+.sc-meta b{display:block;font-family:var(--mono);font-size:15px;color:var(--rail-ink);font-weight:500}
+.sc-bars{display:flex;align-items:flex-end;gap:6px;height:52px;border-bottom:1px solid var(--rail-line);padding-bottom:2px}
+.sc-bars .b{flex:1;max-width:28px;border-radius:5px 5px 2px 2px;background:linear-gradient(to top,var(--accent),var(--accent-2));position:relative;min-height:4px;transition:height .3s}
+.sc-bars .b.hi{background:linear-gradient(to top,#ff7a59,var(--peach))}
+.sc-bars .b span{position:absolute;top:-17px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:10px;color:var(--rail-muted)}
+.sc-empty{font-size:12.5px;color:var(--rail-muted);margin:0}
+.sc-bars:empty{display:none}
+.rules{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px;font-size:12.5px;color:var(--rail-muted)}
+.rules li{display:flex;gap:8px;align-items:flex-start}
+.rules li::before{content:"";flex:none;width:14px;height:14px;margin-top:2px;border-radius:50%;
+  background:rgba(255,159,116,.18) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 24 24' fill='none' stroke='%23ff9f74' stroke-width='4' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6 6 18'/%3E%3C/svg%3E") center/8px no-repeat}
+details.rulesbox summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center}
+details.rulesbox summary::-webkit-details-marker{display:none}
+details.rulesbox summary::after{content:"+";color:var(--rail-muted);font-size:16px}
+details.rulesbox[open] summary::after{content:"–"}
+details.rulesbox[open] .rules{margin-top:10px}
+
+/* ---------- Room ---------- */
+main{display:flex;flex-direction:column;min-width:0;height:100vh;height:100dvh;position:sticky;top:0}
+@media (max-width:860px){main{height:auto;min-height:80vh;position:static}}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:var(--panel);border-bottom:1px solid var(--line);
+  padding-block:12px;padding-left:20px;padding-right:max(20px,env(safe-area-inset-right,0px))}
+@media (max-width:860px){.top{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}}
+.who-top{display:flex;align-items:center;gap:10px;min-width:0}
+.who-top .av{width:38px;height:38px}
+.who-top b{font-family:var(--display);font-size:16px;display:block;line-height:1.2}
+.online{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.online i{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 20%,transparent)}
+.pill{font-size:12px;font-weight:600;color:var(--accent);background:var(--accent-soft);padding:3px 10px;border-radius:999px;white-space:nowrap}
+.tools{display:flex;gap:8px;flex-wrap:wrap}
+.btn.ghost{background:var(--panel);color:var(--ink);border-color:var(--line);font-weight:500;font-size:14px;padding:8px 12px}
+.btn.ghost:hover{background:var(--coach)}
+
+#log{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:18px;
+  padding-block:24px;padding-left:20px;padding-right:max(20px,env(safe-area-inset-right,0px));
+  background:radial-gradient(60% 40% at 100% 0%,var(--accent-soft) 0%,transparent 70%)}
+@media (max-width:860px){#log{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}}
+.line{display:flex;gap:10px;align-items:flex-start;max-width:760px;width:100%}
+.line.you{flex-direction:row-reverse;align-self:flex-end}
+.av{flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:13px}
+.av.coach{background:linear-gradient(135deg,var(--peach),#ff7a59);color:#2a0f04}
+.av.coach svg{width:55%;height:55%}
+.av.you{background:var(--ink);color:var(--panel)}
+.msg{padding:12px 15px;border-radius:16px;min-width:0;overflow-wrap:anywhere;box-shadow:var(--shadow)}
+.line.coach .msg{background:var(--panel);border:1px solid var(--line);border-top-left-radius:5px}
+.line.you .msg{background:linear-gradient(135deg,var(--you),var(--accent-2));color:var(--you-ink);border-top-right-radius:5px;white-space:pre-wrap}
+.msg p{margin:0 0 8px}.msg p:last-child{margin-bottom:0}
+.msg ul,.msg ol{margin:4px 0 10px;padding-left:20px}
+.msg li{margin:2px 0}
+.msg li::marker{color:var(--accent)}
+.msg h4{font-family:var(--display);font-size:16px;margin:12px 0 6px;font-weight:600}
+.msg h4:first-child{margin-top:0}
+.msg b{font-weight:600}
+.msg code{font-family:var(--mono);font-size:13px;background:var(--coach);padding:1px 5px;border-radius:4px}
+.score{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12.5px;background:var(--peach-soft);color:var(--peach-ink);padding:3px 10px 3px 8px;border-radius:999px;vertical-align:middle}
+.score .seg{display:inline-flex;gap:2px}
+.score .seg i{width:9px;height:9px;border-radius:2px;background:color-mix(in srgb,var(--peach-ink) 22%,transparent)}
+.score .seg i.on{background:#ff7a59}
+.dots{display:inline-flex;gap:4px;padding:4px 0}
+.dots i{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:.5}
+@media (prefers-reduced-motion:no-preference){
+  .dots i{animation:blink 1.2s infinite}.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+  @keyframes blink{0%,80%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-3px)}}
+  .line{animation:rise .22s ease-out}@keyframes rise{from{transform:translateY(6px)}to{transform:none}}
+}
+
+.hero{max-width:760px;width:100%;display:flex;flex-direction:column;gap:18px;padding-block:8px}
+.hero h2{font-family:var(--display);font-size:clamp(26px,4vw,36px);line-height:1.08;margin:0;letter-spacing:-.02em;text-wrap:balance}
+.hero h2 em{font-style:normal;background:linear-gradient(transparent 62%,var(--peach-soft) 62%);padding:0 3px}
+.hero p{margin:0;color:var(--muted);max-width:60ch}
+.starters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:640px){.starters{grid-template-columns:minmax(0,1fr)}}
+.starter{text-align:left;cursor:pointer;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow);transition:transform .15s,border-color .15s}
+.starter:hover{transform:translateY(-2px);border-color:var(--accent-2)}
+.starter .ic{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent)}
+.starter .ic svg{width:20px;height:20px}
+.starter b{font-family:var(--display);font-size:16px;font-weight:600}
+.starter small{color:var(--muted);font-size:13px;line-height:1.4}
+.starter .go{font-size:13px;font-weight:600;color:var(--accent);margin-top:auto}
+.sample-q{font-size:13px;color:var(--muted);border-left:3px solid var(--peach);padding:4px 0 4px 12px}
+.sample-q b{color:var(--ink);font-weight:600}
+
+.composer{background:var(--panel);border-top:1px solid var(--line);
+  padding-block:12px 14px;padding-left:20px;padding-right:max(20px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:8px}
+@media (max-width:860px){.composer{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}}
+.inbox{display:flex;align-items:flex-end;gap:8px;background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:6px 6px 6px 14px;transition:border-color .15s,box-shadow .15s}
+.inbox:focus-within{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+.inbox textarea{flex:1;min-width:0;border:0;background:transparent;color:var(--ink);font:inherit;resize:none;padding:8px 0;max-height:180px;min-height:24px;outline:none}
+.send{flex:none;width:40px;height:40px;border-radius:12px;border:0;cursor:pointer;background:linear-gradient(135deg,var(--you),var(--accent-2));color:#fff;display:grid;place-items:center}
+.send svg{width:18px;height:18px}
+.send:disabled{opacity:.45;cursor:not-allowed}
+.stop{flex:none;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:0 12px;cursor:pointer;font-weight:500}
+.hint{font-size:12px;color:var(--muted)}
+.note{font-size:13px;color:var(--warn)}
+</style>
+<style>body{margin:0}</style>
+</head>
+<body>
+
+<div class="app">
+  <aside>
+    <div class="brand">
+      <div class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#2a0f04" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/><path d="m14 7 3-3 3 3"/></svg></div>
+      <div><h1>Offer Ready Coach</h1><p>Practice for Data Analyst &amp; AI roles</p></div>
+    </div>
+
+    <div class="sect">
+      <div class="label">Your target</div>
+      <div class="fields">
+        <label class="f" for="role">Role
+          <select id="role">
+            <option>Data Analyst</option>
+            <option selected>Data Analyst with AI / ML</option>
+            <option>Business Intelligence Analyst</option>
+            <option>Analytics Engineer</option>
+            <option>Product / Marketing Analyst</option>
+          </select>
+        </label>
+        <label class="f" for="level">Experience
+          <select id="level">
+            <option>Student or new grad (0-1 yrs)</option>
+            <option>Early career (1-3 yrs)</option>
+            <option selected>Mid level (3-6 yrs)</option>
+            <option>Senior (6+ yrs)</option>
+            <option>Career switcher</option>
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <div class="sect">
+      <div class="label">Practice mode</div>
+      <div class="modes" id="modes"></div>
+      <button class="btn primary" id="start"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg>Start session</button>
+    </div>
+
+    <div class="sect">
+      <div class="label">Session scorecard</div>
+      <div class="scorecard">
+        <div class="sc-top">
+          <div class="sc-num" id="scAvg">–<small>/5 avg</small></div>
+          <div class="sc-meta">Answers scored<b id="scCount">0</b></div>
+        </div>
+        <div class="sc-bars" id="scBars"></div>
+        <p class="sc-empty" id="scEmpty">Each scored answer in a mock interview shows up here as a bar.</p>
+      </div>
+    </div>
+
+    <details class="rulesbox">
+      <summary class="label">What this coach won't do</summary>
+      <ul class="rules">
+        <li>Invent experience, degrees or numbers you didn't give it</li>
+        <li>Promise you'll get an offer or name exact salaries</li>
+        <li>Ask for your SSN, age, visa status, address or other private details</li>
+        <li>Coach you to be dishonest with an employer</li>
+      </ul>
+    </details>
+  </aside>
+
+  <main>
+    <div class="top">
+      <div class="who-top">
+        <div class="av coach" aria-hidden="true"></div>
+        <div><b>Coach</b><span class="online"><i></i><span id="status">Ready when you are</span></span></div>
+        <span class="pill" id="modePill">Mock interview</span>
+      </div>
+      <div class="tools">
+        <button class="btn ghost" id="wrap" disabled>Wrap up &amp; summarize</button>
+        <button class="btn ghost" id="reset">New session</button>
+      </div>
+    </div>
+    <div id="log" aria-live="polite"></div>
+    <form class="composer" id="form">
+      <div class="inbox">
+        <textarea id="box" rows="1" placeholder="Type your answer or a question…" aria-label="Your message"></textarea>
+        <button type="button" class="stop" id="stop" hidden>Stop</button>
+        <button class="send" id="send" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      </div>
+      <span class="hint">Enter to send · Shift+Enter for a new line · Remove names, emails and phone numbers before pasting a resume.</span>
+      <div class="note" id="note" hidden></div>
+    </form>
+  </main>
+</div>
+
+<script>
+const ICONS={
+  interview:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M9 10h6M9 14h4"/></svg>',
+  resume:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>',
+  jd:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg>'
+};
+const COACH_SVG='<svg viewBox="0 0 24 24" fill="none" stroke="#2a0f04" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V9M10 19V5M16 19v-7"/></svg>';
+const MODES={
+  interview:{name:"Mock interview",blurb:"One question at a time, scored out of 5.",long:"I ask, you answer, and I score each answer with a stronger example.",kick:"Start a mock interview for me."},
+  resume:{name:"Resume bullet review",blurb:"Impact-focused rewrites. No made-up numbers.",long:"Paste up to 5 bullets and get rewrites that show tools, scale and results.",kick:"I'd like help reviewing my resume bullets."},
+  jd:{name:"Job post match",blurb:"See strengths, gaps and likely questions.",long:"Paste a posting and a few lines about you to see where you stand.",kick:"I want to compare myself against a job posting."}
+};
+let mode="interview", turns=[], ctl=null, busy=false, started=false;
+
+const $=id=>document.getElementById(id);
+const log=$("log"), box=$("box"), note=$("note");
+document.querySelectorAll(".av.coach").forEach(a=>a.innerHTML=COACH_SVG);
+
+$("modes").innerHTML=Object.entries(MODES).map(([k,m])=>`<button class="mode" data-mode="${k}" aria-pressed="${k===mode}"><span class="ic">${ICONS[k]}</span><span><b>${m.name}</b><small>${m.blurb}</small></span></button>`).join("");
+
+
+function esc(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function meter(n){const v=Math.max(0,Math.min(5,Math.round(n)));let s="";for(let i=1;i<=5;i++)s+=`<i class="${i<=v?"on":""}"></i>`;return `<span class="score"><span class="seg">${s}</span>${n}/5</span>`}
+function inline(s){return esc(s).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/`([^`]+)`/g,"<code>$1</code>").replace(/\[Score:\s*([\d.]+)\s*\/\s*5\]/gi,(_,n)=>meter(n))}
+function md(src){
+  const lines=src.split("\n"); let out="", list=null;
+  const close=()=>{if(list){out+=`</${list}>`;list=null}};
+  for(const raw of lines){
+    const l=raw.trimEnd(); let m;
+    if(!l.trim()){close();continue}
+    if(m=l.match(/^#{1,6}\s+(.*)/)){close();out+=`<h4>${inline(m[1])}</h4>`;continue}
+    if(m=l.match(/^\s*[-*•]\s+(.*)/)){if(list!=="ul"){close();out+="<ul>";list="ul"}out+=`<li>${inline(m[1])}</li>`;continue}
+    if(m=l.match(/^\s*\d+[.)]\s+(.*)/)){if(list!=="ol"){close();out+="<ol>";list="ol"}out+=`<li>${inline(m[1])}</li>`;continue}
+    close();out+=`<p>${inline(l)}</p>`;
+  }
+  close();return out;
+}
+const DOTS='<span class="dots" aria-label="Coach is thinking"><i></i><i></i><i></i></span>';
+function bubble(who,text){
+  const line=document.createElement("div");line.className="line "+who;
+  const av=document.createElement("div");av.className="av "+who;av.setAttribute("aria-hidden","true");
+  if(who==="coach")av.innerHTML=COACH_SVG;else av.textContent="You";
+  if(who==="you"){av.style.fontSize="10px"}
+  const b=document.createElement("div");b.className="msg";
+  if(who==="you")b.textContent=text;else b.innerHTML=text?md(text):DOTS;
+  line.append(av,b);log.append(line);log.scrollTop=log.scrollHeight;return b;
+}
+function updateScorecard(){
+  const scores=[];
+  for(const t of turns)if(t.role==="assistant"){const re=/\[Score:\s*([\d.]+)\s*\/\s*5\]/gi;let m;while(m=re.exec(t.content))scores.push(Math.min(5,parseFloat(m[1])))}
+  $("scCount").textContent=scores.length;
+  $("scAvg").innerHTML=(scores.length?(scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1):"–")+"<small>/5 avg</small>";
+  $("scBars").innerHTML=scores.slice(-10).map(s=>`<div class="b${s>=4?" hi":""}" style="height:${Math.max(8,s/5*100)}%"><span>${s}</span></div>`).join("");
+  $("scEmpty").hidden=scores.length>0;
+}
+function setStatus(t){$("status").textContent=t||(busy?"Typing…":started?"In session":"Ready when you are");$("modePill").textContent=MODES[mode].name}
+function setBusy(v){busy=v;$("send").disabled=v;$("start").disabled=v;$("wrap").disabled=v||!started;$("stop").hidden=!v;setStatus()}
+function showNote(t){note.textContent=t;note.hidden=!t}
+const COPY={rate_limited:"Too many messages in a short time. Wait a minute, then send again.",prompt_too_large:"That message is too long. Paste a shorter section.",not_configured:"The coach isn't set up yet: the site owner needs to add a GEMINI_API_KEY in Vercel.",refused:"The coach couldn't answer that message. Try rephrasing it."};
+
+function selectMode(k){mode=k;document.querySelectorAll(".mode").forEach(x=>x.setAttribute("aria-pressed",x.dataset.mode===k));setStatus()}
+function startSession(){ask(`${MODES[mode].kick} My target role is ${$("role").value} and my level is ${$("level").value}.`)}
+
+function welcome(){
+  const h=document.createElement("div");h.className="hero";
+  h.innerHTML=`<h2>Walk into your next interview <em>already practiced.</em></h2>
+  <p>Set your target role and experience on the left, then pick how you want to practice. Each session takes about 15 minutes.</p>
+  <div class="starters">${Object.entries(MODES).map(([k,m])=>`<button class="starter" data-mode="${k}"><span class="ic">${ICONS[k]}</span><b>${m.name}</b><small>${m.long}</small><span class="go">Start →</span></button>`).join("")}</div>
+  <div class="sample-q"><b>Sample question:</b> "Tell me about a time your analysis changed a business decision. What data did you use, and how did you know it worked?"</div>`;
+  h.querySelectorAll(".starter").forEach(b=>b.onclick=()=>{if(busy)return;selectMode(b.dataset.mode);startSession()});
+  log.append(h);
+}
+
+async function ask(userText){
+  if(busy)return;
+  showNote("");
+  if(!started){started=true;const h=log.querySelector(".hero");if(h)h.remove()}
+  turns.push({role:"user",content:userText});
+  bubble("you",userText);
+  const out=bubble("coach","");
+  setBusy(true);ctl=new AbortController();
+  const recent=turns.slice(-24); if(recent[0]&&recent[0].role!=="user")recent.shift();
+  try{
+    const res=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},signal:ctl.signal,
+      body:JSON.stringify({role:$("role").value,level:$("level").value,mode,messages:recent})});
+    const data=await res.json().catch(()=>({}));
+    if(!res.ok||!data.text)throw {code:data.code||"upstream_error",message:data.error};
+    out.innerHTML=md(data.text);log.scrollTop=log.scrollHeight;
+    turns.push({role:"assistant",content:data.text});
+  }catch(e){
+    out.closest(".line").remove();turns.pop();
+    if(e&&e.name!=="AbortError")showNote(COPY[e.code]||(e&&e.message)||"Something went wrong reaching the coach. Send your message again.");
+  }finally{setBusy(false);updateScorecard();box.focus()}
+}
+
+$("modes").addEventListener("click",e=>{const b=e.target.closest(".mode");if(!b||busy)return;selectMode(b.dataset.mode);if(started)ask(`Switch to ${MODES[mode].name} mode, please.`)});
+$("start").onclick=startSession;
+$("wrap").onclick=()=>ask("Let's wrap up. Please give me my session summary and next 3 steps.");
+$("stop").onclick=()=>ctl&&ctl.abort();
+$("reset").onclick=()=>{if(busy&&ctl)ctl.abort();turns=[];started=false;log.innerHTML="";showNote("");welcome();setBusy(false);updateScorecard()};
+$("form").addEventListener("submit",e=>{e.preventDefault();const t=box.value.trim();if(!t)return;box.value="";grow();ask(t)});
+function grow(){box.style.height="auto";box.style.height=Math.min(box.scrollHeight,180)+"px"}
+box.addEventListener("input",grow);
+box.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();$("form").requestSubmit()}});
+
+welcome();setStatus();updateScorecard();
+</script>
+</body>
+</html>
