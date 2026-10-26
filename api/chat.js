@@ -3,7 +3,7 @@
 const ROLES = ["Data Analyst","Data Analyst with AI / ML","Business Intelligence Analyst","Analytics Engineer","Product / Marketing Analyst"];
 const LEVELS = ["Student or new grad (0-1 yrs)","Early career (1-3 yrs)","Mid level (3-6 yrs)","Senior (6+ yrs)","Career switcher"];
 const MODE_NAMES = { interview: "Mock interview", resume: "Resume bullet review", jd: "Job post match" };
-const MODELS = (process.env.GEMINI_MODEL || "gemini-3.8-flash,gemini-3.5-flash-lite,gemini-2.5-flash").split(",").map(s => s.trim()).filter(Boolean);
+const MODELS = (process.env.GEMINI_MODEL || "gemini-3.5-flash-lite,gemini-2.5-flash,gemini-3.6-flash").split(",").map(s => s.trim()).filter(Boolean);
 const MAX_CHARS = 60000;
 
 function rules(role, level, mode) {
@@ -65,17 +65,17 @@ module.exports = async function handler(req, res) {
       const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-goog-api-key": key },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload), signal: AbortSignal.timeout(25000)
       });
       const data = await r.json().catch(() => ({}));
       if (r.status === 404) { lastErr = `Model ${model} not available.`; continue; }
       if (r.status === 429) return res.status(429).json({ code: "rate_limited", error: "Too many requests." });
       if (!r.ok) { lastErr = (data.error && data.error.message) || `Gemini error ${r.status}`; continue; }
       const cand = data.candidates && data.candidates[0];
-      const text = cand && cand.content && Array.isArray(cand.content.parts) ? cand.content.parts.map(p => p.text || "").join("").trim() : "";
+      const text = cand && cand.content && Array.isArray(cand.content.parts) ? cand.content.parts.map(p => p.text || "").join("").replace(/^>\s?/gm, "").trim() : "";
       if (!text) return res.status(422).json({ code: "refused", error: "No answer was returned." });
       return res.status(200).json({ text, model });
-    } catch (e) { lastErr = "Could not reach Gemini."; }
+    } catch (e) { lastErr = e && e.name === "TimeoutError" ? `Model ${model} timed out.` : "Could not reach Gemini."; }
   }
   return res.status(502).json({ error: lastErr });
 };
